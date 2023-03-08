@@ -77,9 +77,20 @@ function checkUI() {
 	}
 }
 
+function filterItems() {
+	const items = document.querySelectorAll("ul li");
+	items.forEach((item) => {
+		let textValue = item.innerText || item.textContent;
+		textValue.toUpperCase().includes(itemFilter.value.toUpperCase())
+			? (item.style.display = "")
+			: (item.style.display = "none");
+	});
+}
+
 // Event Listeners
 itemForm.addEventListener("submit", addItem);
 itemList.addEventListener("click", removeItem);
 clearBtn.addEventListener("click", clearList);
+itemFilter.addEventListener("input", filterItems);
 
 checkUI();
