@@ -77,11 +77,11 @@ function checkUI() {
 	}
 }
 
-function filterItems() {
+function filterItems(e) {
 	const items = document.querySelectorAll("ul li");
 	items.forEach((item) => {
-		let textValue = item.innerText || item.textContent;
-		textValue.toUpperCase().includes(itemFilter.value.toUpperCase())
+		let textValue = item.firstChild.textContent;
+		textValue.toUpperCase().includes(e.target.value.toUpperCase())
 			? (item.style.display = "")
 			: (item.style.display = "none");
 	});
