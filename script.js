@@ -23,6 +23,22 @@ function onaddItemSubmit(e) {
 		return;
 	}
 
+	// Check for edit mode
+	if (isEditMode) {
+		const itemToEdit = itemList.querySelector(".edit-mode");
+
+		removeItemFromStorage(itemToEdit.textContent);
+		itemToEdit.classList.remove("edit-mode");
+		itemToEdit.remove();
+		isEditMode = false;
+	} else {
+		if (checkIfItemExists(newItem)) {
+			alert("This item already exists.");
+			itemInput.value = "";
+			return;
+		}
+	}
+
 	// Add item to DOM
 	addItemToDOM(newItem);
 
@@ -93,14 +109,19 @@ function onClickItem(e) {
 	}
 }
 
+function checkIfItemExists(item) {
+	const itemsFromStorage = getItemsFromStorage();
+	return itemsFromStorage.includes(item);
+}
+
 function setItemToEdit(item) {
 	isEditMode = true;
 
 	itemList.querySelectorAll("li").forEach((item) => {
-		item.style.color = "black";
+		item.classList.remove("edit-mode");
 	});
 
-	item.style.color = "#ccc";
+	item.classList.add("edit-mode");
 	formBtn.innerHTML = "<i class='fa-solid fa-pen'></i> Update Item";
 	formBtn.style.backgroundColor = "#228B22";
 	itemInput.value = item.textContent;
@@ -139,6 +160,8 @@ function clearList() {
 }
 
 function checkUI() {
+	itemInput.value = "";
+
 	const items = document.querySelectorAll("ul li");
 	if (items.length === 0) {
 		itemFilter.style.display = "none";
@@ -147,6 +170,11 @@ function checkUI() {
 		itemFilter.style.display = "block";
 		clearBtn.style.display = "block";
 	}
+
+	formBtn.style.backgroundColor = "#333";
+	formBtn.innerHTML = "<i class='fa-solid fa-plus'></i> Add Item";
+
+	isEditMode = false;
 }
 
 function filterItems(e) {
